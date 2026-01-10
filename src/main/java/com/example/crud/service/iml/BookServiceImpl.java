@@ -39,6 +39,7 @@ public class BookServiceImpl implements BookService {
             existingBook.setTitle(book.getTitle());
             existingBook.setAuthor(book.getAuthor());
             existingBook.setYear(book.getYear());
+            existingBook.setShelf(book.getShelf());
 
             return repository.save(existingBook);
         }
