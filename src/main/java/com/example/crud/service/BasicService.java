@@ -1,6 +1,6 @@
 package com.example.crud.service;
 
-import com.example.crud.book.Book;
+import com.example.crud.entity.Book;
 
 public interface BasicService {
 

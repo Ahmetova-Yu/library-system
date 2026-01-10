@@ -1,6 +1,6 @@
 package com.example.crud.repository;
 
-import com.example.crud.book.Book;
+import com.example.crud.entity.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BasicRepository extends JpaRepository<Book, Integer> {

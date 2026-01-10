@@ -1,4 +1,4 @@
-package com.example.crud.book;
+package com.example.crud.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

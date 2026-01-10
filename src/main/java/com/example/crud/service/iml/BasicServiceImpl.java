@@ -1,6 +1,6 @@
 package com.example.crud.service.iml;
 
-import com.example.crud.book.Book;
+import com.example.crud.entity.Book;
 import com.example.crud.repository.BasicRepository;
 import com.example.crud.service.BasicService;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,6 @@
 package com.example.crud.controller;
 
-import com.example.crud.book.Book;
+import com.example.crud.entity.Book;
 import com.example.crud.service.BasicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
