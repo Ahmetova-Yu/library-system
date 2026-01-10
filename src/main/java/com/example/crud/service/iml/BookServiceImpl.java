@@ -1,18 +1,18 @@
 package com.example.crud.service.iml;
 
 import com.example.crud.entity.Book;
-import com.example.crud.repository.BasicRepository;
-import com.example.crud.service.BasicService;
+import com.example.crud.repository.BookRepository;
+import com.example.crud.service.BookService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class BasicServiceImpl implements BasicService {
-    private BasicRepository repository;
+public class BookServiceImpl implements BookService {
+    private BookRepository repository;
 
-    public BasicServiceImpl(BasicRepository repository) {
+    public BookServiceImpl(BookRepository repository) {
         this.repository = repository;
     }
 
@@ -33,16 +33,12 @@ public class BasicServiceImpl implements BasicService {
         Book existingBook = repository.findById(id)
                 .orElse(null);
 
-        System.out.println(existingBook.getTitle() + " " + existingBook.getAuthor() + " " + existingBook.getYear());
 
         if (existingBook != null) {
 
             existingBook.setTitle(book.getTitle());
             existingBook.setAuthor(book.getAuthor());
             existingBook.setYear(book.getYear());
-
-            System.out.println(existingBook.getTitle() + " " + existingBook.getAuthor() + " " + existingBook.getYear());
-            System.out.println("Book updated");
 
             return repository.save(existingBook);
         }
@@ -52,12 +48,14 @@ public class BasicServiceImpl implements BasicService {
     }
 
     @Override
-    public void deleteBook(Integer id) {
+    public String deleteBook(Integer id) {
         if (!repository.existsById(id)) {
-            System.out.println("Книга не найдена");
-            return;
+            return "Книга не найдена";
         }
 
+        String name  = repository.findById(id).get().getTitle();
+
         repository.deleteById(id);
+        return "Книга " + name + " удалена";
     }
 }

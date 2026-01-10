@@ -1,17 +1,17 @@
 package com.example.crud.controller;
 
 import com.example.crud.entity.Book;
-import com.example.crud.service.BasicService;
+import com.example.crud.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/book")
-public class BasicController {
-    private BasicService service;
+public class BookController {
+    private BookService service;
 
     @Autowired
-    public BasicController(BasicService service) {
+    public BookController(BookService service) {
         this.service = service;
     }
 
@@ -32,7 +32,7 @@ public class BasicController {
     }
 
     @DeleteMapping("/{id}")
-    void deleteBook(@PathVariable Integer id) {
-        service.deleteBook(id);
+    String deleteBook(@PathVariable Integer id) {
+        return service.deleteBook(id);
     }
 }

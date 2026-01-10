@@ -2,7 +2,7 @@ package com.example.crud.service;
 
 import com.example.crud.entity.Book;
 
-public interface BasicService {
+public interface BookService {
 
     Book createBook(Book book);
 
@@ -10,5 +10,5 @@ public interface BasicService {
 
     Book updateBook(Integer id, Book book);
 
-    void deleteBook(Integer id);
+    String deleteBook(Integer id);
 }
