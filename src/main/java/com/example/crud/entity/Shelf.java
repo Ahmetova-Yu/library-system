@@ -1,7 +1,7 @@
 package com.example.crud.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +13,10 @@ public class Shelf {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToMany
+    private String name;
+    private String description;
+
+    @OneToMany(mappedBy = "shelf")
+    @JoinColumn(name = "id")
     List<Book> books;
 }
