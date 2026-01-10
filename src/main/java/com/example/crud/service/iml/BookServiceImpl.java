@@ -3,10 +3,19 @@ package com.example.crud.service.iml;
 import com.example.crud.entity.Book;
 import com.example.crud.repository.BookRepository;
 import com.example.crud.service.BookService;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.springframework.data.jpa.repository.query.QueryUtils.applySorting;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -58,5 +67,146 @@ public class BookServiceImpl implements BookService {
 
         repository.deleteById(id);
         return "Книга " + name + " удалена";
+    }
+
+    @Override
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
+    public Page<Book> searchBooks(String keyword, Pageable pageable) {
+        List<Book> allBooks = repository.findAll();
+
+        List<Book> filteredBooks = allBooks.stream()
+                .filter(book ->
+                        book.getTitle().toLowerCase().contains(keyword.toLowerCase()) ||
+                                book.getAuthor().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+
+        return createPageFromList(filteredBooks, pageable);
+    }
+
+    @Override
+    public Page<Book> findByAuthor(String author, Pageable pageable) {
+        List<Book> allBooks = repository.findAll();
+
+        List<Book> filteredBooks = allBooks.stream()
+                .filter(book -> book.getAuthor().toLowerCase().contains(author.toLowerCase()))
+                .collect(Collectors.toList());
+
+        return createPageFromList(filteredBooks, pageable);
+    }
+
+    @Override
+    public Page<Book> findByYear(Integer year, Pageable pageable) {
+        List<Book> allBooks = repository.findAll();
+
+        List<Book> filteredBooks = allBooks.stream()
+                .filter(book -> book.getYear().equals(year))
+                .collect(Collectors.toList());
+
+        return createPageFromList(filteredBooks, pageable);
+    }
+
+    @Override
+    public Page<Book> findByTitleAndAuthor(String title, String author, Pageable pageable) {
+        List<Book> allBooks = repository.findAll();
+
+        List<Book> filteredBooks = allBooks.stream()
+                .filter(book ->
+                        book.getTitle().toLowerCase().contains(title.toLowerCase()) &&
+                                book.getAuthor().toLowerCase().contains(author.toLowerCase()))
+                .collect(Collectors.toList());
+
+        return createPageFromList(filteredBooks, pageable);
+    }
+
+    @Override
+    public List<Book> findAllSortedByTitle() {
+        List<Book> allBooks = repository.findAll();
+
+        return allBooks.stream()
+                .sorted(Comparator.comparing(Book::getTitle, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> findAllSortedByAuthor() {
+        List<Book> allBooks = repository.findAll();
+
+        return allBooks.stream()
+                .sorted(Comparator.comparing(Book::getAuthor, String.CASE_INSENSITIVE_ORDER))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Book> findAllSortedByYear() {
+        List<Book> allBooks = repository.findAll();
+
+        return allBooks.stream()
+                .sorted(Comparator.comparing(Book::getYear))
+                .collect(Collectors.toList());
+    }
+
+    private Page<Book> createPageFromList(List<Book> list, Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<Book> pageList;
+
+        if (list.size() < startItem) {
+            pageList = new ArrayList<>();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, list.size());
+            pageList = list.subList(startItem, toIndex);
+        }
+
+        if (pageable.getSort().isSorted()) {
+            pageList = applySorting(pageList, pageable.getSort());
+        }
+
+        return new PageImpl<>(pageList, pageable, list.size());
+    }
+
+    private List<Book> applySorting(List<Book> books, Sort sort) {
+        List<Comparator<Book>> comparators = new ArrayList<>();
+
+        for (Sort.Order order : sort) {
+            Comparator<Book> comparator;
+
+            switch (order.getProperty().toLowerCase()) {
+                case "title":
+                    comparator = Comparator.comparing(Book::getTitle, String.CASE_INSENSITIVE_ORDER);
+                    break;
+                case "author":
+                    comparator = Comparator.comparing(Book::getAuthor, String.CASE_INSENSITIVE_ORDER);
+                    break;
+                case "year":
+                    comparator = Comparator.comparing(Book::getYear);
+                    break;
+                default:
+                    comparator = Comparator.comparing(Book::getId);
+                    break;
+            }
+
+            if (order.isDescending()) {
+                comparator = comparator.reversed();
+            }
+
+            comparators.add(comparator);
+        }
+
+        if (!comparators.isEmpty()) {
+            Comparator<Book> combinedComparator = comparators.get(0);
+            for (int i = 1; i < comparators.size(); i++) {
+                combinedComparator = combinedComparator.thenComparing(comparators.get(i));
+            }
+
+            books.sort(combinedComparator);
+        }
+
+        return books;
     }
 }
