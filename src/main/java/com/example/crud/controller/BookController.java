@@ -20,171 +20,121 @@ public class BookController {
     @Autowired
     private BookService serviceBook;
 
-    // Создать книгу
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        try {
-            Book createdBook = serviceBook.createBook(book);
-            return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Book createdBook = serviceBook.createBook(book);
+        return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
     }
 
-    // Получить все книги в виде строки
     @GetMapping("/all")
     public ResponseEntity<String> readBook() {
-        try {
-            String book = serviceBook.readBook();
-            return new ResponseEntity<>(book, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        String book = serviceBook.readBook();
+        return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
-    // Обновить книгу
     @PutMapping("/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable Integer id, @RequestBody Book book) {
-        try {
-            Book updatedBook = serviceBook.updateBook(id, book);
-            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        Book updatedBook = serviceBook.updateBook(id, book);
+        return new ResponseEntity<>(updatedBook, HttpStatus.OK);
     }
 
-    // Удалить книгу
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteBook(@PathVariable Integer id) {
-        try {
-            String deleteBook = serviceBook.deleteBook(id);
-            return new ResponseEntity<>(deleteBook, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        String deleteBook = serviceBook.deleteBook(id);
+        return new ResponseEntity<>(deleteBook, HttpStatus.OK);
     }
 
-    // Получить все книги с пагинацией и сортировкой
     @GetMapping
-    public ResponseEntity<Page<Book>> getAllBooks(
+    public ResponseEntity<List<Book>> getAllBooks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "title") String sortBy,
             @RequestParam(defaultValue = "asc") String direction) {
 
-        try {
-            Sort sort = direction.equalsIgnoreCase("desc")
-                    ? Sort.by(sortBy).descending()
-                    : Sort.by(sortBy).ascending();
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
 
-            Pageable pageable = PageRequest.of(page, size, sort);
-            Page<Book> booksPage = serviceBook.getAllBooks(pageable);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Book> booksPage = serviceBook.getAllBooks(pageable);
 
-            return new ResponseEntity<>(booksPage, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = booksPage.getContent();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Поиск книг по ключевому слову
     @GetMapping("/search")
-    public ResponseEntity<Page<Book>> searchBooks(
+    public ResponseEntity<List<Book>> searchBooks(
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Book> booksPage = serviceBook.searchBooks(keyword, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> booksPage = serviceBook.searchBooks(keyword, pageable);
 
-            return new ResponseEntity<>(booksPage, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = booksPage.getContent();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Поиск книг по автору
     @GetMapping("/author")
-    public ResponseEntity<Page<Book>> findByAuthor(
+    public ResponseEntity<List<Book>> findByAuthor(
             @RequestParam String author,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Book> booksPage = serviceBook.findByAuthor(author, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> booksPage = serviceBook.findByAuthor(author, pageable);
 
-            return new ResponseEntity<>(booksPage, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = booksPage.getContent();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Поиск книг по году
     @GetMapping("/year")
-    public ResponseEntity<Page<Book>> findByYear(
+    public ResponseEntity<List<Book>> findByYear(
             @RequestParam Integer year,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Book> booksPage = serviceBook.findByYear(year, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> booksPage = serviceBook.findByYear(year, pageable);
 
-            return new ResponseEntity<>(booksPage, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = booksPage.getContent();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Поиск книг по названию и автору
     @GetMapping("/title-author")
-    public ResponseEntity<Page<Book>> findByTitleAndAuthor(
+    public ResponseEntity<List<Book>> findByTitleAndAuthor(
             @RequestParam String title,
             @RequestParam String author,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        try {
-            Pageable pageable = PageRequest.of(page, size);
-            Page<Book> booksPage = serviceBook.findByTitleAndAuthor(title, author, pageable);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> booksPage = serviceBook.findByTitleAndAuthor(title, author, pageable);
 
-            return new ResponseEntity<>(booksPage, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = booksPage.getContent();
+
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Получить все книги, отсортированные по названию
     @GetMapping("/sorted/title")
     public ResponseEntity<List<Book>> findAllSortedByTitle() {
-        try {
-            List<Book> books = serviceBook.findAllSortedByTitle();
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = serviceBook.findAllSortedByTitle();
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Получить все книги, отсортированные по автору
     @GetMapping("/sorted/author")
     public ResponseEntity<List<Book>> findAllSortedByAuthor() {
-        try {
-            List<Book> books = serviceBook.findAllSortedByAuthor();
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = serviceBook.findAllSortedByAuthor();
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    // Получить все книги, отсортированные по году
     @GetMapping("/sorted/year")
     public ResponseEntity<List<Book>> findAllSortedByYear() {
-        try {
-            List<Book> books = serviceBook.findAllSortedByYear();
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        List<Book> books = serviceBook.findAllSortedByYear();
+        return new ResponseEntity<>(books, HttpStatus.OK);
     }
 }
