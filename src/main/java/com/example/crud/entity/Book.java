@@ -23,6 +23,6 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shelf_id", nullable = true)
-    @JsonIgnoreProperties({"books", "hibernateLazyInitializer", "handler", "id"})
+    @JsonIgnoreProperties({"books", "hibernateLazyInitializer", "handler"})
     private Shelf shelf;
 }
