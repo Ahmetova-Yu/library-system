@@ -28,11 +28,11 @@ public class ShelfController {
         return new ResponseEntity<>(createdShelf, HttpStatus.CREATED);
     }
 
-//    @GetMapping
-//    ResponseEntity<String> readShelf() {
-//        String shelf = serviceShelf.readShelf();
-//        return new ResponseEntity<>(shelf, HttpStatus.OK);
-//    }
+    @GetMapping
+    ResponseEntity<String> readShelf() {
+        String shelf = serviceShelf.readShelf();
+        return new ResponseEntity<>(shelf, HttpStatus.OK);
+    }
 
     @PutMapping("/{id}")
     ResponseEntity<Shelf> updateShelf(@PathVariable Integer id, @RequestBody Shelf shelf) {
@@ -65,23 +65,5 @@ public class ShelfController {
             @PathVariable Integer bookId) {
         String result = serviceShelf.addBookToShelf(shelfId, bookId);
         return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Shelf>> getAllShelves(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "name") String sortBy,
-            @RequestParam(defaultValue = "asc") String direction) {
-
-        Sort sort = direction.equalsIgnoreCase("desc")
-                ? Sort.by(sortBy).descending()
-                : Sort.by(sortBy).ascending();
-
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Shelf> shelvesPage = serviceShelf.getAllShelves(pageable);
-
-        List<Shelf> shelves = shelvesPage.getContent();
-        return new ResponseEntity<>(shelves, HttpStatus.OK);
     }
 }

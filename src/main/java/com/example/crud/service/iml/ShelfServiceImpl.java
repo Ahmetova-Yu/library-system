@@ -34,12 +34,12 @@ public class ShelfServiceImpl implements ShelfService {
         return shelfRepository.save(shelf);
     }
 
-//    @Override
-//    public String readShelf() {
-//        List<Shelf> shelfs = shelfRepository.findAll();
-//
-//        return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
-//    }
+    @Override
+    public String readShelf() {
+        List<Shelf> shelfs = shelfRepository.findAll();
+
+        return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
+    }
 
     @Override
     public Shelf updateShelf(Integer id, Shelf shelf) {
@@ -131,10 +131,5 @@ public class ShelfServiceImpl implements ShelfService {
         bookRepository.save(book);
 
         return "Книга '" + book.getTitle() + "' добавлена на полку '" + shelf.getName() + "'";
-    }
-
-    @Override
-    public Page<Shelf> getAllShelves(Pageable pageable) {
-        return shelfRepository.findAll(pageable);
     }
 }

@@ -11,7 +11,7 @@ public interface ShelfService {
 
     Shelf createShelf(Shelf shelf);
 
-   // String readShelf();
+    String readShelf();
 
     Shelf updateShelf(Integer id, Shelf shelf);
 
@@ -22,6 +22,4 @@ public interface ShelfService {
     String removeBookFromShelfByBookId(Integer bookId);
 
     String addBookToShelf(Integer shelfId, Integer bookId);
-
-    Page<Shelf> getAllShelves(Pageable pageable);
 }
