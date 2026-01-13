@@ -8,6 +8,8 @@ import com.example.crud.service.ShelfService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,12 +34,12 @@ public class ShelfServiceImpl implements ShelfService {
         return shelfRepository.save(shelf);
     }
 
-    @Override
-    public String readShelf() {
-        List<Shelf> shelfs = shelfRepository.findAll();
-
-        return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
-    }
+//    @Override
+//    public String readShelf() {
+//        List<Shelf> shelfs = shelfRepository.findAll();
+//
+//        return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
+//    }
 
     @Override
     public Shelf updateShelf(Integer id, Shelf shelf) {
@@ -129,5 +131,10 @@ public class ShelfServiceImpl implements ShelfService {
         bookRepository.save(book);
 
         return "Книга '" + book.getTitle() + "' добавлена на полку '" + shelf.getName() + "'";
+    }
+
+    @Override
+    public Page<Shelf> getAllShelves(Pageable pageable) {
+        return shelfRepository.findAll(pageable);
     }
 }

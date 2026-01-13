@@ -54,8 +54,6 @@ public class BookServiceImpl implements BookService {
                 System.out.println("ВНИМАНИЕ: Полка с ID " + shelfId + " не найдена!");
                 book.setShelf(null);
             }
-        } else {
-            System.out.println("ноль");
         }
 
         return repository.save(book);

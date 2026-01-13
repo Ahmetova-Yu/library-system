@@ -24,12 +24,6 @@ public class BookController {
     @Autowired
     private BookService serviceBook;
 
-//    @PostMapping
-//    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-//        Book createdBook = serviceBook.createBook(book);
-//        return new ResponseEntity<>(createdBook, HttpStatus.CREATED);
-//    }
-
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         Book createdBook = serviceBook.createBook(book);

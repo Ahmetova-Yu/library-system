@@ -2,6 +2,8 @@ package com.example.crud.service;
 
 import com.example.crud.entity.Book;
 import com.example.crud.entity.Shelf;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,7 +11,7 @@ public interface ShelfService {
 
     Shelf createShelf(Shelf shelf);
 
-    String readShelf();
+   // String readShelf();
 
     Shelf updateShelf(Integer id, Shelf shelf);
 
@@ -20,4 +22,6 @@ public interface ShelfService {
     String removeBookFromShelfByBookId(Integer bookId);
 
     String addBookToShelf(Integer shelfId, Integer bookId);
+
+    Page<Shelf> getAllShelves(Pageable pageable);
 }
