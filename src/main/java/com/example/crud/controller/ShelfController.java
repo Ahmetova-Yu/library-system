@@ -29,8 +29,8 @@ public class ShelfController {
     }
 
     @GetMapping
-    ResponseEntity<String> readShelf() {
-        String shelf = serviceShelf.readShelf();
+    ResponseEntity<List<Shelf>> readShelf() {
+        List<Shelf> shelf = serviceShelf.readShelf();
         return new ResponseEntity<>(shelf, HttpStatus.OK);
     }
 

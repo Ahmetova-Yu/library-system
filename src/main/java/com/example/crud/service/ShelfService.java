@@ -11,7 +11,7 @@ public interface ShelfService {
 
     Shelf createShelf(Shelf shelf);
 
-    String readShelf();
+    List<Shelf> readShelf();
 
     Shelf updateShelf(Integer id, Shelf shelf);
 

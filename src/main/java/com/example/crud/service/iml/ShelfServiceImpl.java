@@ -35,10 +35,11 @@ public class ShelfServiceImpl implements ShelfService {
     }
 
     @Override
-    public String readShelf() {
-        List<Shelf> shelfs = shelfRepository.findAll();
+    public List<Shelf> readShelf() {
+        List<Shelf> shelves = shelfRepository.findAll();
 
-        return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
+        return shelves;
+        //return shelfs.stream().map(Shelf::toString).collect(Collectors.joining("\n"));
     }
 
     @Override
